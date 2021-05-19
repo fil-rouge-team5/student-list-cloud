@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+    API:
+        image: filrougeteam5/student-list
+        container_name: my_container_app
+        volumes:
+            - ./simple_api/student_age.json:/data/student_age.json
+    website:
+        image: php:7.2-apache
+        container_name: my_container_php
+        environment:
+            - USERNAME=toto
+            - PASSWORD=python
+        volumes:
+            - ./website:/var/www/html
+        ports:
+            - 80:80
+        depends_on:
+            - API

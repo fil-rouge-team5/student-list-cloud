@@ -1,0 +1,47 @@
+---
+- name: "fil-rouge installation"
+  become: true
+  hosts: prod
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: Create a network
+      community.docker.docker_network:
+        name: "reseau1"
+
+    - name: "Clean Folder"
+      file:
+        path: "/home/centos/student-list/"
+        state: absent
+
+    - name: "example copying file with owner and permissions"
+      copy:
+        src: ../
+        dest: /home/centos/student-list/
+
+
+    - name: Create website container
+      docker_container:
+        name: "website"
+        image: "php:7.2-apache"
+        ports: 80:80
+        pull: true
+        env:
+          USERNAME: "toto"
+          PASSWORD: "python"
+        networks:
+          - name: "reseau1"
+        volumes:
+          - /home/centos/student-list/website:/var/www/html
+
+    - name: Create api containers
+      docker_container:
+        name: "api"
+        image: "192.168.31.140:5007/student-list"
+        ports: 5000:5000
+        networks:
+          - name: "reseau1"
+        pull: true
+        volumes:
+          - /home/centos/student-list/simple_api/student_age.json:/data/student_age.json
+...

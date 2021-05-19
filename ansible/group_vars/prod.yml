@@ -1,0 +1,8 @@
+---
+ansible_user: centos
+ansible_ssh_pass: centos
+ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+ansible_sudo_pass: centos
+docker_network_name: team5
+ansible_host: 192.168.31.132
+...
